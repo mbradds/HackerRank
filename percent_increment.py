@@ -17,28 +17,28 @@ Outputs:
 def percent_increment(percentages,increment=0.01):
     
     results = []
+    #add the original percent array to to results
+    results.append(percentages)
     
     for percent in percentages:
         
-        up_val = percent 
         i = 0
         zeroes = 0
         zero_list = []
         allocation = 0
-        
-        while up_val+i < 1:
+               
+        while percent+i < 1:
             
             i = i+increment
             current_results = []
             share = (i-allocation)/((len(percentages)-1)-zeroes)
             
-            
             for p in percentages:
                     
                 if p == percent:
-                    current_results.append(up_val+i)
+                    current_results.append(round((percent+i),2))
                 elif p-share > 0:
-                    current_results.append(p-share)
+                    current_results.append(round((p-share),2))
                 else:
                     if p not in zero_list:
                         zero_list.append(p)
@@ -52,9 +52,54 @@ def percent_increment(percentages,increment=0.01):
             results.append(current_results)
             
     return(results)
+
+def percent_increment_dictionary(percentages,increment=0.01):
     
-    return(None)
+    results = []
+    #add the original percent array to to results
+    results.append({'real data':list(percentages.values())})
+    
+    for pipe,percent in percentages.items():
+        
+        i = 0
+        zeroes = 0
+        zero_list = []
+        allocation = 0
+               
+        while percent+i < 1:
+            
+            i = i+increment
+            current_results = []
+            share = (i-allocation)/((len(percentages)-1)-zeroes)
+            
+            for pipe2,p in percentages.items():
+                    
+                if p == percent:
+                    current_results.append(round((percent+i),2))
+                elif p-share > 0:
+                    current_results.append(round((p-share),2))
+                else:
+                    if p not in zero_list:
+                        zero_list.append(p)
+                        allocation = allocation+p
+                        
+                    zeroes = len(zero_list)
+                    current_results.append(0)
+                    
+            print(current_results,sum(current_results),pipe)
+                    
+            results.append({str(pipe)+'+'+str(round((i*100),0))+' percent':current_results})
+            
+    return(results)
 
 p = [0.6,0.13,0.06,0.21]
+
+p1 = {'first percentage':0.6,
+      'second percentage':0.13,
+      'third percentage':0.06,
+      'fourth percentage':0.21}
 increment = 0.05
-x = percent_increment(p,increment)
+#x = percent_increment(p,increment)
+x = percent_increment_dictionary(p1,increment)
+
+
